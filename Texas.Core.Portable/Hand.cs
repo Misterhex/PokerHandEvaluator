@@ -2,23 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace Texas.Core
+namespace Texas.Core.Portable
 {
-    public class Hand : Tuple<Card, Card, Card, Card, Card>, IEnumerable<Card>
+    /// <summary>
+    /// A hand always consists of five cards.
+    /// </summary>
+    public class Hand : IEnumerable<Card>
     {
         private IEnumerable<Card> _cards;
 
         public Hand(IEnumerable<Card> cards)
-            : base(cards.First(), cards.Second(), cards.Third(), cards.Fourth(), cards.Fifth())
         {
             if (cards == null) throw new ArgumentNullException("cards");
             if (cards.Count() != 5) throw new ArgumentException("hand must be exactly 5 cards.");
             if (cards.GroupBy(i => new { i.Rank, i.Suit }).Count() != 5) throw new DuplicatedCardInHandException();
 
             _cards = cards;
-
         }
 
         public IEnumerator<Card> GetEnumerator()
@@ -32,8 +32,4 @@ namespace Texas.Core
         }
     }
 
-
-    
-
-    
 }

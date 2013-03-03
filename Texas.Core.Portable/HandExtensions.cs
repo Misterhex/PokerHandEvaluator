@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace Texas.Core
+namespace Texas.Core.Portable
 {
     public static class HandExtensions
     {
@@ -66,15 +65,57 @@ namespace Texas.Core
 
         private static bool IsStraight(this Hand hand)
         {
-            if (hand.Count() == 5)
-            {
-                var orderedByRank = hand.OrderByDescending(i => i.Rank);
-                var highestRank = orderedByRank.First();
-                var lowestRank = orderedByRank.Last();
-                if ((highestRank.Rank - lowestRank.Rank) == 4)
-                    return true;
-            }
+            var orderedByRank = hand.OrderByDescending(i => i.Rank);
+            var highestRank = orderedByRank.First();
+            var lowestRank = orderedByRank.Last();
+            if ((highestRank.Rank - lowestRank.Rank) == 40)
+                return true;
+
+            if (hand.IsWheelStraight())
+                return true;
+
             return false;
+        }
+
+        private static bool IsWheelStraight(this Hand hand)
+        {
+            return hand.Select(i => i.Rank).Contains(Rank.Ace, Rank.Two, Rank.Three, Rank.Four, Rank.Five);
+        }
+
+        public static IEnumerable<Card> GetKickers(this Hand hand)
+        {
+            HandCategory handCat = hand.GetHandCategory();
+            if (handCat == HandCategory.OnePair)
+            {
+                IEnumerable<Card> pairCards = hand.GroupBy(i => i.Rank).Where(i => i.Count() == 2).Single().Select(i => i);
+                IEnumerable<Card> remainingCards = hand.Except(pairCards).OrderByDescending(i => i.Point);
+                return remainingCards;
+            }
+
+            if (handCat == HandCategory.TwoPair)
+            {
+                IEnumerable<Card> pairCards = hand.GroupBy(i => i.Rank).Where(i => i.Count() == 2).ToList().SelectMany(i => i);
+                IEnumerable<Card> remainingCard = hand.Except(pairCards);
+                return remainingCard;
+            }
+
+            if (handCat == HandCategory.ThreeOfAKind)
+            {
+                IEnumerable<Card> pairCards = hand.GroupBy(i => i.Rank).Where(i => i.Count() == 3).Single().Select(i => i);
+                IEnumerable<Card> remainingCards = hand.Except(pairCards).OrderByDescending(i => i.Point);
+                return remainingCards;
+            }
+
+            if (handCat == HandCategory.FourOfAKind)
+            {
+                IEnumerable<Card> pairCards = hand.GroupBy(i => i.Rank).Where(i => i.Count() == 4).Single().Select(i => i);
+                IEnumerable<Card> remainingCard = hand.Except(pairCards);
+                return remainingCard;
+            }
+
+            // certain hand category does not have kickers concept because all five cards or no cards are used to form a hand category.
+            // e.g fullhouse, straight, flush, straightflush, highcard.
+            return null;
         }
     }
 }

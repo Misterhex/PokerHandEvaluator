@@ -1,12 +1,14 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
+using System.Linq;
 
-namespace Texas.Core.Tests
+namespace Texas.Core.Portable.Tests
 {
     [TestClass]
     public class HandTests
     {
+
         [TestMethod]
         public void Should_return_four_of_a_kind()
         {
@@ -174,6 +176,37 @@ namespace Texas.Core.Tests
             Assert.AreEqual(HandCategory.HighCard, hand.GetHandCategory());
         }
 
+        [TestMethod]
+        public void Should_return_straight_for_boardway_straight()
+        {
+            List<Card> cards = new List<Card>() 
+            {
+                new Card(Rank.Ten, Suit.Spade),
+                new Card(Rank.Jack, Suit.Spade),
+                new Card(Rank.Queen, Suit.Diamond),
+                new Card(Rank.King, Suit.Spade),
+                new Card(Rank.Ace, Suit.Club)
+            };
+
+            Hand hand = new Hand(cards);
+            Assert.AreEqual(HandCategory.Straight, hand.GetHandCategory());
+        }
+
+        [TestMethod]
+        public void Should_return_straight_for_wheel_straight()
+        {
+            List<Card> cards = new List<Card>() 
+            {
+                new Card(Rank.Five, Suit.Spade),
+                new Card(Rank.Four, Suit.Spade),
+                new Card(Rank.Three, Suit.Diamond),
+                new Card(Rank.Two, Suit.Spade),
+                new Card(Rank.Ace, Suit.Club)
+            };
+
+            Hand hand = new Hand(cards);
+            Assert.AreEqual(HandCategory.Straight, hand.GetHandCategory());
+        }
 
         [TestMethod]
         [ExpectedException(typeof(DuplicatedCardInHandException))]
@@ -190,5 +223,135 @@ namespace Texas.Core.Tests
 
             Hand hand = new Hand(cards);
         }
+
+        [TestMethod]
+        public void Should_return_correct_kickers_for_one_pair_hand()
+        {
+            Hand hand = new Hand(
+                new List<Card>() 
+            {
+                new Card(Rank.Ace, Suit.Spade),
+                new Card(Rank.Ace, Suit.Diamond),
+                new Card(Rank.Jack, Suit.Spade),
+                new Card(Rank.King, Suit.Club),
+                new Card(Rank.Four, Suit.Spade)
+            });
+
+
+            IEnumerable<Card> kickers = hand.GetKickers();
+            Assert.AreEqual(3, kickers.Count());
+            Assert.IsTrue(new Card(Rank.King, Suit.Club).Equals(kickers.First()));
+            Assert.IsTrue(new Card(Rank.Jack, Suit.Spade).Equals(kickers.Second()));
+            Assert.IsTrue(new Card(Rank.Four, Suit.Spade).Equals(kickers.Third()));
+        }
+
+        [TestMethod]
+        public void Should_return_correct_kicker_for_two_pair_hand()
+        {
+            Hand hand = new Hand(
+                new List<Card>() 
+            {
+                new Card(Rank.Ace, Suit.Spade),
+                new Card(Rank.Ace, Suit.Diamond),
+                new Card(Rank.King, Suit.Spade),
+                new Card(Rank.King, Suit.Club),
+                new Card(Rank.Four, Suit.Spade)
+            });
+
+
+            IEnumerable<Card> kickers = hand.GetKickers();
+            Assert.AreEqual(1, kickers.Count());
+            Assert.IsTrue(new Card(Rank.Four, Suit.Spade).Equals(kickers.Single()));
+        }
+
+        [TestMethod]
+        public void Should_return_correct_kickers_for_three_of_a_kind_hand()
+        {
+            Hand hand = new Hand(
+                new List<Card>() 
+            {
+                new Card(Rank.Ace, Suit.Spade),
+                new Card(Rank.Ace, Suit.Diamond),
+                new Card(Rank.Ace, Suit.Club),
+                new Card(Rank.Nine, Suit.Heart),
+                new Card(Rank.Eigth, Suit.Spade)
+            });
+
+
+            IEnumerable<Card> kickers = hand.GetKickers();
+            Assert.AreEqual(2, kickers.Count());
+            Assert.IsTrue(new Card(Rank.Nine, Suit.Heart).Equals(kickers.First()));
+            Assert.IsTrue(new Card(Rank.Eigth, Suit.Spade).Equals(kickers.Second()));
+        }
+
+        [TestMethod]
+        public void Should_return_correct_kicker_for_four_of_a_kind_hand()
+        {
+            Hand hand = new Hand(
+                new List<Card>() 
+            {
+                new Card(Rank.Ace, Suit.Spade),
+                new Card(Rank.Ace, Suit.Diamond),
+                new Card(Rank.Ace, Suit.Club),
+                new Card(Rank.Ace, Suit.Heart),
+                new Card(Rank.Eigth, Suit.Spade)
+            });
+
+
+            IEnumerable<Card> kickers = hand.GetKickers();
+            Assert.AreEqual(1, kickers.Count());
+            Assert.IsTrue(new Card(Rank.Eigth, Suit.Spade).Equals(kickers.First()));
+        }
+
+
+        [TestMethod]
+        public void Should_return_null_when_get_kickers_for_highcard_flush_straightflush_and_straight()
+        {
+            // high card
+            Assert.IsNull(new Hand(new List<Card>() 
+            {
+                 new Card(Rank.Ace, Suit.Spade),
+                new Card(Rank.King, Suit.Diamond),
+                new Card(Rank.Jack, Suit.Heart),
+                new Card(Rank.Five, Suit.Club),
+                new Card(Rank.Three, Suit.Diamond)
+            })
+            .GetKickers());
+
+            // flush
+            Assert.IsNull(new Hand(new List<Card>() 
+            {
+                new Card(Rank.Ace, Suit.Spade),
+                new Card(Rank.Jack, Suit.Spade),
+                new Card(Rank.Nine, Suit.Spade),
+                new Card(Rank.Eigth, Suit.Spade),
+                new Card(Rank.Four, Suit.Spade)
+            })
+           .GetKickers());
+
+            // straight
+            Assert.IsNull(new Hand(new List<Card>() 
+            {
+                 new Card(Rank.Ace, Suit.Spade),
+                new Card(Rank.King, Suit.Diamond),
+                new Card(Rank.Jack, Suit.Spade),
+                new Card(Rank.Queen, Suit.Club),
+                new Card(Rank.Ten, Suit.Spade)
+            })
+           .GetKickers());
+
+            // straightflush
+            Assert.IsNull(new Hand(new List<Card>() 
+            {
+                new Card(Rank.Ace, Suit.Spade),
+                new Card(Rank.King, Suit.Spade),
+                new Card(Rank.Jack, Suit.Spade),
+                new Card(Rank.Queen, Suit.Spade),
+                new Card(Rank.Ten, Suit.Spade)
+            })
+           .GetKickers());
+
+        }
+
     }
 }

@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Texas.Core.Tests", "Texas.Core.Tests\Texas.Core.Tests.csproj", "{91889DE8-50E7-4516-9E6F-884BED0E008B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Texas.Core.Portable.Tests", "Texas.Core.Portable.Tests\Texas.Core.Portable.Tests.csproj", "{91889DE8-50E7-4516-9E6F-884BED0E008B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Texas.Core", "Texas.Core\Texas.Core.csproj", "{39DD3141-24AA-4BF1-B1A1-523BF0DCC0BE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Texas.Core.Portable", "Texas.Core.Portable\Texas.Core.Portable.csproj", "{7252F1D6-57D4-4B88-A8D0-FAE882EEE038}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,16 +27,16 @@ Global
 		{91889DE8-50E7-4516-9E6F-884BED0E008B}.Release|ARM.ActiveCfg = Release|Any CPU
 		{91889DE8-50E7-4516-9E6F-884BED0E008B}.Release|x64.ActiveCfg = Release|Any CPU
 		{91889DE8-50E7-4516-9E6F-884BED0E008B}.Release|x86.ActiveCfg = Release|Any CPU
-		{39DD3141-24AA-4BF1-B1A1-523BF0DCC0BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{39DD3141-24AA-4BF1-B1A1-523BF0DCC0BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{39DD3141-24AA-4BF1-B1A1-523BF0DCC0BE}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{39DD3141-24AA-4BF1-B1A1-523BF0DCC0BE}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{39DD3141-24AA-4BF1-B1A1-523BF0DCC0BE}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{39DD3141-24AA-4BF1-B1A1-523BF0DCC0BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{39DD3141-24AA-4BF1-B1A1-523BF0DCC0BE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{39DD3141-24AA-4BF1-B1A1-523BF0DCC0BE}.Release|ARM.ActiveCfg = Release|Any CPU
-		{39DD3141-24AA-4BF1-B1A1-523BF0DCC0BE}.Release|x64.ActiveCfg = Release|Any CPU
-		{39DD3141-24AA-4BF1-B1A1-523BF0DCC0BE}.Release|x86.ActiveCfg = Release|Any CPU
+		{7252F1D6-57D4-4B88-A8D0-FAE882EEE038}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7252F1D6-57D4-4B88-A8D0-FAE882EEE038}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7252F1D6-57D4-4B88-A8D0-FAE882EEE038}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{7252F1D6-57D4-4B88-A8D0-FAE882EEE038}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{7252F1D6-57D4-4B88-A8D0-FAE882EEE038}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7252F1D6-57D4-4B88-A8D0-FAE882EEE038}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7252F1D6-57D4-4B88-A8D0-FAE882EEE038}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7252F1D6-57D4-4B88-A8D0-FAE882EEE038}.Release|ARM.ActiveCfg = Release|Any CPU
+		{7252F1D6-57D4-4B88-A8D0-FAE882EEE038}.Release|x64.ActiveCfg = Release|Any CPU
+		{7252F1D6-57D4-4B88-A8D0-FAE882EEE038}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
