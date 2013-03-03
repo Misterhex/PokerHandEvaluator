@@ -10,7 +10,7 @@ namespace Texas.Core.Portable
     {
         public Rank Rank { get; private set; }
         public Suit Suit { get; private set; }
-        
+
         public int Point
         {
             get
@@ -27,14 +27,13 @@ namespace Texas.Core.Portable
 
         public bool Equals(Card other)
         {
-            return (this.Rank == other.Rank && this.Suit == other.Suit);
+            return this.Point == other.Point;
         }
 
         public override string ToString()
         {
             return string.Format("{0}{1}", this.Rank.ToPokerString(), this.Suit.ToPokerString());
         }
-
     }
 
 }
