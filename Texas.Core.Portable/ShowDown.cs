@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.ComponentModel;
+using System.Collections;
+using System.Linq.Expressions;
 
 namespace Texas.Core.Portable
 {
@@ -11,7 +12,7 @@ namespace Texas.Core.Portable
     /// </summary>
     public class ShowDown
     {
-        class CardComparer : IEqualityComparer<Card>
+        class CardComparer : IEqualityComparer<Card> , IComparer<Card>
         {
             public bool Equals(Card x, Card y)
             {
@@ -21,6 +22,14 @@ namespace Texas.Core.Portable
             public int GetHashCode(Card obj)
             {
                 return obj.Point.GetHashCode();
+            }
+
+            public int Compare(Card x, Card y)
+            {
+                if (x.Point > y.Point)
+                    return 1;
+                else
+                    return -1;
             }
         }
 
@@ -60,6 +69,76 @@ namespace Texas.Core.Portable
             }
         }
 
+        class FourOfAKindShowDown
+        {
+            public IEnumerable<Hand> GetWinners(IEnumerable<Hand> hands)
+            {
+                List<Rank> allFourOfAKindRanks = new List<Rank>();
+                foreach (var hand in hands)
+                {
+                    var rank = hand.GroupBy(i => i.Rank).Where(j => j.Count() == 4).Select(i => i.Key).Single();
+                    allFourOfAKindRanks.Add(rank);
+                }
+                Rank highestRank = allFourOfAKindRanks.Max(i => i);
+                Hand winnerHand = hands.Where(i => i.GroupBy(j => j.Rank).Where(k => k.Count() == 4).Single().Key == highestRank).Single();
+
+                return new List<Hand>() { winnerHand };
+            }
+        }
+
+        class ThreeOfAKindShowDown
+        {
+            public IEnumerable<Hand> GetWinners(IEnumerable<Hand> hands)
+            {
+                List<Rank> allThreeOfAKind = new List<Rank>();
+                foreach (var hand in hands)
+                {
+                    var rank = hand.GroupBy(i => i.Rank).Where(j => j.Count() == 3).Select(i => i.Key).Single();
+                    allThreeOfAKind.Add(rank);
+                }
+                Rank highestRank = allThreeOfAKind.Max(i => i);
+                Hand winnerHand = hands.Where(i => i.GroupBy(j => j.Rank).Where(k => k.Count() == 3).Single().Key == highestRank).Single();
+
+                return new List<Hand>() { winnerHand };
+            }
+        }
+
+        class TwoPairShowDown
+        {
+            class TwoPair
+            {
+                public Hand Hand { get; private set; }
+                public Rank HigherPair { get; private set; }
+                public Rank LowerPair { get; private set; }
+                public Card Kicker { get; private set; }
+
+                public TwoPair(Hand hand)
+                {
+                    this.Hand = hand;
+                    var ranks = hand.GroupBy(i => i.Rank).Where(j => j.Count() == 2).Select(k => k.Key).OrderByDescending(i => i).ToList();
+                    this.HigherPair = ranks.First();
+                    this.LowerPair = ranks.Second();
+                    this.Kicker = hand.GetKickers().Single();
+                }
+            }
+
+            public IEnumerable<Hand> GetWinners(IEnumerable<Hand> hands)
+            {
+                var twoPairHands = hands.Select(i => new TwoPair(i));
+
+                TwoPair highestTwoPair = twoPairHands.OrderByDescending(i => i.HigherPair)
+                    .ThenByDescending(j => j.LowerPair)
+                    .ThenByDescending<TwoPair, Card>(k => k.Kicker, new CardComparer())
+                    .First();
+
+                return new List<Hand> { highestTwoPair.Hand };
+            }
+        }
+
+        class OnePairShowDown
+        {
+
+        }
 
         public IEnumerable<Hand> GetWinners(IEnumerable<Hand> allHands)
         {
@@ -87,6 +166,12 @@ namespace Texas.Core.Portable
                     return new FlushAndStraightFlushShowDown().GetWinners(highestHands);
                 case HandCategory.Straight:
                     return new StraightShowDown().GetWinners(highestHands);
+                case HandCategory.FourOfAKind:
+                    return new FourOfAKindShowDown().GetWinners(highestHands);
+                case HandCategory.ThreeOfAKind:
+                    return new ThreeOfAKindShowDown().GetWinners(highestHands);
+                case HandCategory.TwoPair:
+                    return new TwoPairShowDown().GetWinners(highestHands);
             }
 
             throw new NotSupportedException(string.Format("does not support getting winners for hand category {0}", highestCategory.ToString()));

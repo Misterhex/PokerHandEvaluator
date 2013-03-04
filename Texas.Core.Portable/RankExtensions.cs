@@ -16,7 +16,7 @@ namespace Texas.Core.Portable
                 {
                     _dict = new Dictionary<Rank, string>();
                     _dict.Add(Rank.Ace, "A");
-                    _dict.Add(Rank.Two, "2");
+                    _dict.Add(Rank.Deuce, "2");
                     _dict.Add(Rank.Three, "3");
                     _dict.Add(Rank.Four, "4");
                     _dict.Add(Rank.Five, "5");

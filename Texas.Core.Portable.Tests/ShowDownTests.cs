@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections;
 
 namespace Texas.Core.Portable.Tests
 {
@@ -154,7 +155,7 @@ namespace Texas.Core.Portable.Tests
             // straightflush
             allHands.Add(new Hand(new List<Card>() 
             {
-                new Card(Rank.Two, Suit.Spade),
+                new Card(Rank.Deuce, Suit.Spade),
                 new Card(Rank.Three, Suit.Spade),
                 new Card(Rank.Four, Suit.Spade),
                 new Card(Rank.Five, Suit.Spade),
@@ -228,7 +229,7 @@ namespace Texas.Core.Portable.Tests
                 new Card(Rank.Nine, Suit.Heart),
                 new Card(Rank.Seven, Suit.Heart),
                 new Card(Rank.Three, Suit.Heart),
-                new Card(Rank.Two, Suit.Heart)
+                new Card(Rank.Deuce, Suit.Heart)
             }));
 
             allHands.Add(new Hand(new List<Card>() 
@@ -237,7 +238,7 @@ namespace Texas.Core.Portable.Tests
                 new Card(Rank.Nine, Suit.Club),
                 new Card(Rank.Seven, Suit.Club),
                 new Card(Rank.Three, Suit.Club),
-                new Card(Rank.Two, Suit.Club)
+                new Card(Rank.Deuce, Suit.Club)
             }));
 
             allHands.Add(new Hand(new List<Card>() 
@@ -246,7 +247,7 @@ namespace Texas.Core.Portable.Tests
                 new Card(Rank.Nine, Suit.Diamond),
                 new Card(Rank.Seven, Suit.Diamond),
                 new Card(Rank.Three, Suit.Diamond),
-                new Card(Rank.Two, Suit.Diamond)
+                new Card(Rank.Deuce, Suit.Diamond)
             }));
 
 
@@ -258,7 +259,143 @@ namespace Texas.Core.Portable.Tests
                 new Card(Rank.Nine, Suit.Heart),
                 new Card(Rank.Seven, Suit.Heart),
                 new Card(Rank.Three, Suit.Heart),
-                new Card(Rank.Two, Suit.Heart)));
+                new Card(Rank.Deuce, Suit.Heart)));
+        }
+
+        [TestMethod]
+        public void Should_get_the_best_hand_in_a_four_of_a_kind_show_down()
+        {
+            List<Hand> allHands = new List<Hand>();
+
+            allHands.Add(new Hand(new List<Card>() 
+            {
+                new Card(Rank.King, Suit.Spade),
+                new Card(Rank.King, Suit.Heart),
+                new Card(Rank.King, Suit.Club),
+                new Card(Rank.King, Suit.Diamond),
+                new Card(Rank.Deuce, Suit.Diamond)
+            }));
+
+            allHands.Add(new Hand(new List<Card>() 
+            {
+                new Card(Rank.Queen, Suit.Spade),
+                new Card(Rank.Queen, Suit.Heart),
+                new Card(Rank.Queen, Suit.Club),
+                new Card(Rank.Queen, Suit.Diamond),
+                new Card(Rank.Ace, Suit.Spade)
+            }));
+
+            allHands.Add(new Hand(new List<Card>() 
+            {
+                new Card(Rank.Jack, Suit.Spade),
+                new Card(Rank.Jack, Suit.Heart),
+                new Card(Rank.Jack, Suit.Club),
+                new Card(Rank.Jack, Suit.Diamond),
+                new Card(Rank.Ace, Suit.Heart)
+            }));
+
+            ShowDown showDown = new ShowDown();
+            var bestHands = showDown.GetWinners(allHands);
+
+            Assert.IsTrue(bestHands.Single().Contains
+                (
+                new Card(Rank.King, Suit.Spade),
+                new Card(Rank.King, Suit.Heart),
+                new Card(Rank.King, Suit.Club),
+                new Card(Rank.King, Suit.Diamond),
+                new Card(Rank.Deuce, Suit.Diamond)
+                ));
+        }
+
+        [TestMethod]
+        public void Should_get_the_best_hand_in_a_three_of_a_kind_show_down()
+        {
+            List<Hand> allHands = new List<Hand>();
+
+            allHands.Add(new Hand(new List<Card>() 
+            {
+                new Card(Rank.King, Suit.Spade),
+                new Card(Rank.King, Suit.Heart),
+                new Card(Rank.King, Suit.Club),
+                new Card(Rank.Nine, Suit.Diamond),
+                new Card(Rank.Deuce, Suit.Diamond)
+            }));
+
+            allHands.Add(new Hand(new List<Card>() 
+            {
+                new Card(Rank.Queen, Suit.Spade),
+                new Card(Rank.Queen, Suit.Heart),
+                new Card(Rank.Queen, Suit.Club),
+                new Card(Rank.Ten, Suit.Diamond),
+                new Card(Rank.Ace, Suit.Spade)
+            }));
+
+            allHands.Add(new Hand(new List<Card>() 
+            {
+                new Card(Rank.Jack, Suit.Spade),
+                new Card(Rank.Jack, Suit.Heart),
+                new Card(Rank.Jack, Suit.Club),
+                new Card(Rank.Deuce, Suit.Club),
+                new Card(Rank.Ace, Suit.Heart)
+            }));
+
+            ShowDown showDown = new ShowDown();
+            var bestHands = showDown.GetWinners(allHands);
+
+            Assert.IsTrue(bestHands.Single().Contains
+                (
+                new Card(Rank.King, Suit.Spade),
+                new Card(Rank.King, Suit.Heart),
+                new Card(Rank.King, Suit.Club),
+                new Card(Rank.Nine, Suit.Diamond),
+                new Card(Rank.Deuce, Suit.Diamond)
+                ));
+        }
+
+
+        [TestMethod]
+        public void Should_get_the_best_hand_in_a_two_pair_show_down()
+        {
+            List<Hand> allHands = new List<Hand>();
+
+            allHands.Add(new Hand(new List<Card>() 
+            {
+                new Card(Rank.King, Suit.Spade),
+                new Card(Rank.King, Suit.Heart),
+                new Card(Rank.Nine, Suit.Club),
+                new Card(Rank.Nine, Suit.Diamond),
+                new Card(Rank.Deuce, Suit.Diamond)
+            }));
+
+            allHands.Add(new Hand(new List<Card>() 
+            {
+                new Card(Rank.King, Suit.Club),
+                new Card(Rank.King, Suit.Diamond),
+                new Card(Rank.Nine, Suit.Spade),
+                new Card(Rank.Nine, Suit.Heart),
+                new Card(Rank.Deuce, Suit.Spade)
+            }));
+
+            allHands.Add(new Hand(new List<Card>() 
+            {
+                new Card(Rank.Queen, Suit.Spade),
+                new Card(Rank.Queen, Suit.Heart),
+                new Card(Rank.Jack, Suit.Club),
+                new Card(Rank.Jack, Suit.Diamond),
+                new Card(Rank.Ace, Suit.Heart)
+            }));
+
+            ShowDown showDown = new ShowDown();
+            var bestHands = showDown.GetWinners(allHands);
+
+            Assert.IsTrue(bestHands.Single().Contains
+                (
+                new Card(Rank.King, Suit.Club),
+                new Card(Rank.King, Suit.Diamond),
+                new Card(Rank.Nine, Suit.Spade),
+                new Card(Rank.Nine, Suit.Heart),
+                new Card(Rank.Deuce, Suit.Spade)
+                ));
         }
     }
 }

@@ -19,7 +19,7 @@ namespace Texas.Core.Portable
         Five = 50,
         Four = 40,
         Three = 30,
-        Two = 20
+        Deuce = 20
     }
 
 

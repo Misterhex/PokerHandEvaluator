@@ -79,7 +79,7 @@ namespace Texas.Core.Portable
 
         private static bool IsWheelStraight(this Hand hand)
         {
-            return hand.Select(i => i.Rank).Contains(Rank.Ace, Rank.Two, Rank.Three, Rank.Four, Rank.Five);
+            return hand.Select(i => i.Rank).Contains(Rank.Ace, Rank.Deuce, Rank.Three, Rank.Four, Rank.Five);
         }
 
         public static IEnumerable<Card> GetKickers(this Hand hand)

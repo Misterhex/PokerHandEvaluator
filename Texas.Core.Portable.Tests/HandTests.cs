@@ -165,7 +165,7 @@ namespace Texas.Core.Portable.Tests
         {
             List<Card> cards = new List<Card>() 
             {
-                new Card(Rank.Two, Suit.Spade),
+                new Card(Rank.Deuce, Suit.Spade),
                 new Card(Rank.Ace, Suit.Spade),
                 new Card(Rank.King, Suit.Diamond),
                 new Card(Rank.Jack, Suit.Spade),
@@ -200,7 +200,7 @@ namespace Texas.Core.Portable.Tests
                 new Card(Rank.Five, Suit.Spade),
                 new Card(Rank.Four, Suit.Spade),
                 new Card(Rank.Three, Suit.Diamond),
-                new Card(Rank.Two, Suit.Spade),
+                new Card(Rank.Deuce, Suit.Spade),
                 new Card(Rank.Ace, Suit.Club)
             };
 
