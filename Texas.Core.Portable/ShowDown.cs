@@ -12,7 +12,7 @@ namespace Texas.Core.Portable
     /// </summary>
     public class ShowDown
     {
-        class CardComparer : IEqualityComparer<Card> , IComparer<Card>
+        class CardComparer : IEqualityComparer<Card>, IComparer<Card>
         {
             public bool Equals(Card x, Card y)
             {
@@ -137,7 +137,46 @@ namespace Texas.Core.Portable
 
         class OnePairShowDown
         {
+            class OnePair
+            {
+                public Hand Hand { get; private set; }
+                public Rank Pair { get; private set; }
+                public Card Kicker { get; private set; }
 
+                public OnePair(Hand hand)
+                {
+                    this.Hand = hand;
+                    this.Pair = hand.GroupBy(i => i.Rank).Where(j => j.Count() == 2).Select(k => k.Key).Single();
+                    this.Kicker = hand.GetKickers().First();
+                }
+            }
+
+            public IEnumerable<Hand> GetWinners(IEnumerable<Hand> hands)
+            {
+                var onePairs = hands.Select(hand => new OnePair(hand));
+
+                OnePair highest = onePairs
+                    .OrderByDescending(i => i.Pair)
+                    .ThenByDescending<OnePair, Card>(k => k.Kicker, new CardComparer())
+                    .First();
+
+                return new List<Hand> { highest.Hand };
+            }
+        }
+
+        class HighCardShowDown
+        {
+            public IEnumerable<Hand> GetWinners(IEnumerable<Hand> hands)
+            {
+                int highestCardPoint = hands.SelectMany(i => i).Max(i => i.Point);
+                foreach (var hand in hands)
+                {
+                    if (hand.Where(i => i.Point == highestCardPoint).SingleOrDefault() != null)
+                        return new List<Hand>() { hand };
+                }
+
+                throw new InvalidOperationException("was unable to determine any winner, check algorithm for HighCardShowDown");
+            }
         }
 
         public IEnumerable<Hand> GetWinners(IEnumerable<Hand> allHands)
@@ -172,6 +211,10 @@ namespace Texas.Core.Portable
                     return new ThreeOfAKindShowDown().GetWinners(highestHands);
                 case HandCategory.TwoPair:
                     return new TwoPairShowDown().GetWinners(highestHands);
+                case HandCategory.OnePair:
+                    return new OnePairShowDown().GetWinners(highestHands);
+                case HandCategory.HighCard:
+                    return new HighCardShowDown().GetWinners(highestHands);
             }
 
             throw new NotSupportedException(string.Format("does not support getting winners for hand category {0}", highestCategory.ToString()));
