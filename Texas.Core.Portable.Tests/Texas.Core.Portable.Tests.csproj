@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FizzWare.NBuilder">
+      <HintPath>..\packages\NBuilder.3.0.1.1\lib\FizzWare.NBuilder.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <Choose>
@@ -51,6 +54,8 @@
   </Choose>
   <ItemGroup>
     <Compile Include="CardTests.cs" />
+    <Compile Include="DeckTests.cs" />
+    <Compile Include="GameTests.cs" />
     <Compile Include="ShowDownTests.cs" />
     <Compile Include="HandTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -61,6 +66,9 @@
       <Project>{7252f1d6-57d4-4b88-a8d0-fae882eee038}</Project>
       <Name>Texas.Core.Portable</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

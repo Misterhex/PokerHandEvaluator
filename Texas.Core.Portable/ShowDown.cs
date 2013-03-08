@@ -12,27 +12,6 @@ namespace Texas.Core.Portable
     /// </summary>
     public class ShowDown
     {
-        class CardComparer : IEqualityComparer<Card>, IComparer<Card>
-        {
-            public bool Equals(Card x, Card y)
-            {
-                return x.Point == y.Point;
-            }
-
-            public int GetHashCode(Card obj)
-            {
-                return obj.Point.GetHashCode();
-            }
-
-            public int Compare(Card x, Card y)
-            {
-                if (x.Point > y.Point)
-                    return 1;
-                else
-                    return -1;
-            }
-        }
-
         class FlushAndStraightFlushShowDown
         {
             public IEnumerable<Hand> GetWinners(IEnumerable<Hand> hands)
