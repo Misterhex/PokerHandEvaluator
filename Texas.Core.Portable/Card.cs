@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Texas.Core.Portable
 {
-    public class Card : IEquatable<Card>
+    public class Card : IEquatable<Card>, IComparable<Card>
     {
         public Rank Rank { get; private set; }
         public Suit Suit { get; private set; }
@@ -33,6 +33,11 @@ namespace Texas.Core.Portable
         public override string ToString()
         {
             return string.Format("{0}{1}", this.Rank.ToPokerString(), this.Suit.ToPokerString());
+        }
+
+        public int CompareTo(Card other)
+        {
+            return this.Point > other.Point ? 1 : -1;
         }
     }
 

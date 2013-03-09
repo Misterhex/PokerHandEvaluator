@@ -18,7 +18,7 @@ namespace Texas.Core.Portable
             if (cards.Count() != 5) throw new ArgumentException("hand must be exactly 5 cards.");
             if (cards.GroupBy(i => new { i.Rank, i.Suit }).Count() != 5) throw new DuplicatedCardInHandException();
 
-            _cards = cards;
+            _cards = cards.OrderByDescending(i => i.Point);
         }
 
         public IEnumerator<Card> GetEnumerator()
@@ -31,5 +31,5 @@ namespace Texas.Core.Portable
             return _cards.GetEnumerator();
         }
     }
-
 }
+

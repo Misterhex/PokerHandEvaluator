@@ -39,7 +39,7 @@ namespace Texas.Core.Portable.Tests
             game.DealTurn();
             Assert.AreEqual(4, game.Board.Count);
 
-            game.DealTurn();
+            game.DealRiver();
             Assert.AreEqual(5, game.Board.Count);
         }
 
@@ -49,15 +49,13 @@ namespace Texas.Core.Portable.Tests
             IEnumerable<Player> players = Builder<Player>.CreateListOfSize(7).Build().ToList();
             Game game = new Game();
             game.DealStartingHands(players);
-            
-
             game.DealFlop();
-
+            game.DealTurn();
             game.DealRiver();
 
-            game.DealRiver();
+            var winners = game.GetWinner(players);
 
-
+            throw new NotImplementedException();
         }
 
     }

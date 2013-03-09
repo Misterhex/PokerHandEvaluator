@@ -323,6 +323,15 @@ namespace Texas.Core.Portable.Tests
 
             allHands.Add(new Hand(new List<Card>() 
             {
+                new Card(Rank.King, Suit.Spade),
+                new Card(Rank.King, Suit.Heart),
+                new Card(Rank.King, Suit.Club),
+                new Card(Rank.Nine, Suit.Spade),
+                new Card(Rank.Deuce, Suit.Diamond)
+            }));
+
+            allHands.Add(new Hand(new List<Card>() 
+            {
                 new Card(Rank.Queen, Suit.Spade),
                 new Card(Rank.Queen, Suit.Heart),
                 new Card(Rank.Queen, Suit.Club),
@@ -347,7 +356,7 @@ namespace Texas.Core.Portable.Tests
                 new Card(Rank.King, Suit.Spade),
                 new Card(Rank.King, Suit.Heart),
                 new Card(Rank.King, Suit.Club),
-                new Card(Rank.Nine, Suit.Diamond),
+                new Card(Rank.Nine, Suit.Spade),
                 new Card(Rank.Deuce, Suit.Diamond)
                 ));
         }

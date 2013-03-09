@@ -58,10 +58,23 @@ namespace Texas.Core.Portable
                     var rank = hand.GroupBy(i => i.Rank).Where(j => j.Count() == 4).Select(i => i.Key).Single();
                     allFourOfAKindRanks.Add(rank);
                 }
-                Rank highestRank = allFourOfAKindRanks.Max(i => i);
-                Hand winnerHand = hands.Where(i => i.GroupBy(j => j.Rank).Where(k => k.Count() == 4).Single().Key == highestRank).Single();
+                Rank highestFourOfAKindRank = allFourOfAKindRanks.Max(i => i);
+                IEnumerable<Hand> highestFourOfKindHands = hands
+                    .Where(i => i.GroupBy(j => j.Rank).Where(k => k.Count() == 4)
+                    .Single().Key == highestFourOfAKindRank).ToList();
 
-                return new List<Hand>() { winnerHand };
+                // challenge kicker
+                int highestKicker = highestFourOfKindHands
+                    .Select(hand => hand.GetKickers()
+                        .First()).Max(i => i.Point);
+
+                foreach (var highestHand in highestFourOfKindHands)
+                {
+                    if (highestHand.Where(i => i.Point == highestKicker).Any())
+                        return new List<Hand>() { highestHand };
+                }
+
+                throw new InvalidOperationException("was unable to determine any winner, check algorithm for FourOfAKindShowDown");
             }
         }
 
@@ -76,9 +89,20 @@ namespace Texas.Core.Portable
                     allThreeOfAKind.Add(rank);
                 }
                 Rank highestRank = allThreeOfAKind.Max(i => i);
-                Hand winnerHand = hands.Where(i => i.GroupBy(j => j.Rank).Where(k => k.Count() == 3).Single().Key == highestRank).Single();
+                IEnumerable<Hand> winningHands = hands.Where(i => i.GroupBy(j => j.Rank).Where(k => k.Count() == 3).Single().Key == highestRank).ToList();
 
-                return new List<Hand>() { winnerHand };
+                Card highestKicker = winningHands.Select(i => i.GetKickers()).SelectMany(i => i).Max(i => i);
+
+                foreach (var winningHand in winningHands)
+                {
+                    if (winningHand.Where(i => i == highestKicker).Any())
+                    {
+                        return new List<Hand>() { winningHand };
+                    }
+                }
+
+                throw new InvalidOperationException("was unable to determine any winner, check algorithm for FourOfAKindShowDown");
+
             }
         }
 
@@ -103,6 +127,7 @@ namespace Texas.Core.Portable
 
             public IEnumerable<Hand> GetWinners(IEnumerable<Hand> hands)
             {
+                //fix deadlocking code here.
                 var twoPairHands = hands.Select(i => new TwoPair(i));
 
                 TwoPair highestTwoPair = twoPairHands.OrderByDescending(i => i.HigherPair)
@@ -162,17 +187,6 @@ namespace Texas.Core.Portable
         {
             if (allHands == null) throw new ArgumentNullException("allHands");
             if (allHands.Count() < 2) throw new ArgumentNullException("nothing to show down if less than 2 hands.");
-
-            if (allHands.SelectMany(i => i).Count() != allHands.SelectMany(i => i).Distinct(new CardComparer()).Count())
-            {
-                var duplicatedCards = allHands.SelectMany(i => i).Except(allHands.SelectMany(i => i).Distinct(new CardComparer()));
-                StringBuilder sb = new StringBuilder();
-                foreach (var s in duplicatedCards.Select(i => i.ToString() + " "))
-                {
-                    sb.Append(s + " ");
-                }
-                throw new ArgumentException(string.Format("allHands cannot contain duplicated cards {0}", sb));
-            }
 
             HandCategory highestCategory = allHands.Select(i => i.GetHandCategory()).Max();
             IEnumerable<Hand> highestHands = allHands.Where(i => i.GetHandCategory() == highestCategory);

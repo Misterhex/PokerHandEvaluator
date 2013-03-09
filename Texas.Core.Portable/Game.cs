@@ -6,6 +6,20 @@ using System.Text;
 
 namespace Texas.Core.Portable
 {
+    public class HandComparer : IEqualityComparer<Hand>
+    {
+        public bool Equals(Hand x, Hand y)
+        {
+            return x.Sum(i => i.Point) == y.Sum(i => i.Point);
+        }
+
+        public int GetHashCode(Hand obj)
+        {
+            return obj.Sum(i => i.Point).GetHashCode();
+        }
+    }
+
+
     public class Game
     {
         private Deck _deck = new Deck();
@@ -64,11 +78,24 @@ namespace Texas.Core.Portable
             this.Board.Add(_deck.Pop());
         }
 
-        public void GetWinner(IEnumerable<Player> players)
+        public IEnumerable<Player> GetWinner(IEnumerable<Player> players)
         {
-            players.Select(player => player.StartingHand.Concat(this.Board));
+            Dictionary<Player, IEnumerable<Hand>> playerHandCombinations = new Dictionary<Player, IEnumerable<Hand>>();
 
-            //new ShowDown().GetWinners();
+            foreach (var player in players)
+            {
+                IEnumerable<Hand> distinctHandCombination = player.StartingHand.Concat(this.Board).Combinations(5)
+                    .Select(cards => new Hand(cards)).Distinct(new HandComparer());
+                playerHandCombinations.Add(player, distinctHandCombination);
+            }
+
+            IEnumerable<Hand> winningHands = new ShowDown().GetWinners(playerHandCombinations.SelectMany(i => i.Value));
+
+            IEnumerable<Player> winningPlayers = playerHandCombinations
+                .Where(i => i.Value.Contains(winningHands.First(), new HandComparer()))
+                .Select(i => i.Key).ToList();
+
+            return winningPlayers;
         }
     }
 
