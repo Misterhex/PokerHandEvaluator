@@ -7,14 +7,19 @@ using System.Linq.Expressions;
 
 namespace Texas.Core.Portable
 {
+    public interface IShowDown
+    {
+        IEnumerable<Hand> GetWinner(IEnumerable<Hand> hands);
+    }
+
     /// <summary>
     /// ShowDown a texas holdem game.
     /// </summary>
-    public class ShowDown
+    public class ShowDown : IShowDown
     {
-        class FlushAndStraightFlushShowDown
+        class FlushAndStraightFlushShowDown : IShowDown
         {
-            public IEnumerable<Hand> GetWinners(IEnumerable<Hand> hands)
+            public IEnumerable<Hand> GetWinner(IEnumerable<Hand> hands)
             {
                 // find highest suit.
                 int highestSuit = hands.GroupBy(i => (int)i.ToList().First().Suit).Select(i => i.Key).Max();
@@ -33,9 +38,9 @@ namespace Texas.Core.Portable
             }
         }
 
-        class StraightShowDown
+        class StraightShowDown : IShowDown
         {
-            public IEnumerable<Hand> GetWinners(IEnumerable<Hand> hands)
+            public IEnumerable<Hand> GetWinner(IEnumerable<Hand> hands)
             {
                 int highestCardPointInHighestSuit = hands.SelectMany(i => i).Max(i => i.Point);
                 foreach (var hand in hands)
@@ -48,9 +53,9 @@ namespace Texas.Core.Portable
             }
         }
 
-        class FourOfAKindShowDown
+        class FourOfAKindShowDown : IShowDown
         {
-            public IEnumerable<Hand> GetWinners(IEnumerable<Hand> hands)
+            public IEnumerable<Hand> GetWinner(IEnumerable<Hand> hands)
             {
                 List<Rank> allFourOfAKindRanks = new List<Rank>();
                 foreach (var hand in hands)
@@ -78,9 +83,32 @@ namespace Texas.Core.Portable
             }
         }
 
-        class ThreeOfAKindShowDown
+        class FullHouseShowDown : IShowDown
         {
-            public IEnumerable<Hand> GetWinners(IEnumerable<Hand> hands)
+            class FullHouse
+            {
+                public Rank FullHouseRank { get; private set; }
+                public Rank OnePairRank { get; private set; }
+
+                public FullHouse(Hand hand)
+                {
+                    this.FullHouseRank = hand.GroupBy(i => i.Rank).Where(i => i.Count() == 3).Select(i => i.Key).Single();
+                    this.OnePairRank = hand.GroupBy(i => i.Rank).Where(i => i.Count() == 2).Select(i => i.Key).Single();
+                }
+            }
+
+            public IEnumerable<Hand> GetWinner(IEnumerable<Hand> hands)
+            {
+                return hands.Select(i => new FullHouse(i))
+                    .OrderByDescending(i => i.FullHouseRank)
+                    .OrderByDescending(i => i.OnePairRank).ToList();
+            }
+        }
+
+
+        class ThreeOfAKindShowDown : IShowDown
+        {
+            public IEnumerable<Hand> GetWinner(IEnumerable<Hand> hands)
             {
                 List<Rank> allThreeOfAKind = new List<Rank>();
                 foreach (var hand in hands)
@@ -106,7 +134,7 @@ namespace Texas.Core.Portable
             }
         }
 
-        class TwoPairShowDown
+        class TwoPairShowDown : IShowDown
         {
             class TwoPair
             {
@@ -125,21 +153,21 @@ namespace Texas.Core.Portable
                 }
             }
 
-            public IEnumerable<Hand> GetWinners(IEnumerable<Hand> hands)
+            public IEnumerable<Hand> GetWinner(IEnumerable<Hand> hands)
             {
                 //fix deadlocking code here.
                 var twoPairHands = hands.Select(i => new TwoPair(i));
 
                 TwoPair highestTwoPair = twoPairHands.OrderByDescending(i => i.HigherPair)
                     .ThenByDescending(j => j.LowerPair)
-                    .ThenByDescending<TwoPair, Card>(k => k.Kicker, new CardComparer())
+                    .ThenByDescending(k => k.Kicker.Point)
                     .First();
 
                 return new List<Hand> { highestTwoPair.Hand };
             }
         }
 
-        class OnePairShowDown
+        class OnePairShowDown : IShowDown
         {
             class OnePair
             {
@@ -155,22 +183,22 @@ namespace Texas.Core.Portable
                 }
             }
 
-            public IEnumerable<Hand> GetWinners(IEnumerable<Hand> hands)
+            public IEnumerable<Hand> GetWinner(IEnumerable<Hand> hands)
             {
                 var onePairs = hands.Select(hand => new OnePair(hand));
 
                 OnePair highest = onePairs
                     .OrderByDescending(i => i.Pair)
-                    .ThenByDescending<OnePair, Card>(k => k.Kicker, new CardComparer())
+                    .ThenByDescending(k => k.Kicker.Point)
                     .First();
 
                 return new List<Hand> { highest.Hand };
             }
         }
 
-        class HighCardShowDown
+        class HighCardShowDown : IShowDown
         {
-            public IEnumerable<Hand> GetWinners(IEnumerable<Hand> hands)
+            public IEnumerable<Hand> GetWinner(IEnumerable<Hand> hands)
             {
                 int highestCardPoint = hands.SelectMany(i => i).Max(i => i.Point);
                 foreach (var hand in hands)
@@ -183,7 +211,7 @@ namespace Texas.Core.Portable
             }
         }
 
-        public IEnumerable<Hand> GetWinners(IEnumerable<Hand> allHands)
+        public IEnumerable<Hand> GetWinner(IEnumerable<Hand> allHands)
         {
             if (allHands == null) throw new ArgumentNullException("allHands");
             if (allHands.Count() < 2) throw new ArgumentNullException("nothing to show down if less than 2 hands.");
@@ -195,19 +223,21 @@ namespace Texas.Core.Portable
             {
                 case HandCategory.StraightFlush:
                 case HandCategory.Flush:
-                    return new FlushAndStraightFlushShowDown().GetWinners(highestHands);
+                    return new FlushAndStraightFlushShowDown().GetWinner(highestHands);
                 case HandCategory.Straight:
-                    return new StraightShowDown().GetWinners(highestHands);
+                    return new StraightShowDown().GetWinner(highestHands);
                 case HandCategory.FourOfAKind:
-                    return new FourOfAKindShowDown().GetWinners(highestHands);
+                    return new FourOfAKindShowDown().GetWinner(highestHands);
                 case HandCategory.ThreeOfAKind:
-                    return new ThreeOfAKindShowDown().GetWinners(highestHands);
+                    return new ThreeOfAKindShowDown().GetWinner(highestHands);
+                case HandCategory.FullHouse:
+                    return new FullHouseShowDown().GetWinner(highestHands);
                 case HandCategory.TwoPair:
-                    return new TwoPairShowDown().GetWinners(highestHands);
+                    return new TwoPairShowDown().GetWinner(highestHands);
                 case HandCategory.OnePair:
-                    return new OnePairShowDown().GetWinners(highestHands);
+                    return new OnePairShowDown().GetWinner(highestHands);
                 case HandCategory.HighCard:
-                    return new HighCardShowDown().GetWinners(highestHands);
+                    return new HighCardShowDown().GetWinner(highestHands);
             }
 
             throw new NotSupportedException(string.Format("does not support getting winners for hand category {0}", highestCategory.ToString()));

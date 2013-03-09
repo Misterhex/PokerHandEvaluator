@@ -30,6 +30,11 @@ namespace Texas.Core.Portable
         {
             return _cards.GetEnumerator();
         }
+
+        public override string ToString()
+        {
+            return string.Concat(values: _cards.Select(card => card.ToString() + " ").ToArray());
+        }
     }
 }
 

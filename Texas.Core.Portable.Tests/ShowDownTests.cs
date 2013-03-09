@@ -11,35 +11,7 @@ namespace Texas.Core.Portable.Tests
     [TestClass]
     public class ShowDownTests
     {
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void Should_catch_argument_exception_because_duplicated_card_was_passed_in_as_arguments()
-        {
-            List<Hand> allHands = new List<Hand>();
-
-            // straightflush
-            allHands.Add(new Hand(new List<Card>() 
-            {
-                new Card(Rank.Ace, Suit.Club),
-                new Card(Rank.King, Suit.Club),
-                new Card(Rank.Jack, Suit.Club),
-                new Card(Rank.Queen, Suit.Club),
-                new Card(Rank.Ten, Suit.Club)
-            }));
-            // straightflush
-            allHands.Add(new Hand(new List<Card>() 
-            {
-                new Card(Rank.Ace, Suit.Club),
-                new Card(Rank.King, Suit.Club),
-                new Card(Rank.Jack, Suit.Club),
-                new Card(Rank.Queen, Suit.Club),
-                new Card(Rank.Ten, Suit.Club)
-            }));
-
-            ShowDown showDown = new ShowDown();
-            showDown.GetWinners(allHands);
-        }
-
+      
         [TestMethod]
         public void Should_get_the_best_hands()
         {
@@ -86,7 +58,7 @@ namespace Texas.Core.Portable.Tests
             }));
 
             ShowDown showDown = new ShowDown();
-            var bestHands = showDown.GetWinners(allHands);
+            var bestHands = showDown.GetWinner(allHands);
 
             Assert.IsTrue(bestHands.Single().Contains
                 (new Card(Rank.Ace, Suit.Heart),
@@ -163,7 +135,7 @@ namespace Texas.Core.Portable.Tests
             }));
 
             ShowDown showDown = new ShowDown();
-            var bestHands = showDown.GetWinners(allHands);
+            var bestHands = showDown.GetWinner(allHands);
 
             Assert.IsTrue(bestHands.Single().Contains
                 (new Card(Rank.Ace, Suit.Spade),
@@ -208,7 +180,7 @@ namespace Texas.Core.Portable.Tests
 
 
             ShowDown showDown = new ShowDown();
-            var bestHands = showDown.GetWinners(allHands);
+            var bestHands = showDown.GetWinner(allHands);
 
             Assert.IsTrue(bestHands.Single().Contains
                 (new Card(Rank.Ace, Suit.Heart),
@@ -252,7 +224,7 @@ namespace Texas.Core.Portable.Tests
 
 
             ShowDown showDown = new ShowDown();
-            var bestHands = showDown.GetWinners(allHands);
+            var bestHands = showDown.GetWinner(allHands);
 
             Assert.IsTrue(bestHands.Single().Contains
                 (new Card(Rank.King, Suit.Heart),
@@ -295,7 +267,7 @@ namespace Texas.Core.Portable.Tests
             }));
 
             ShowDown showDown = new ShowDown();
-            var bestHands = showDown.GetWinners(allHands);
+            var bestHands = showDown.GetWinner(allHands);
 
             Assert.IsTrue(bestHands.Single().Contains
                 (
@@ -349,7 +321,7 @@ namespace Texas.Core.Portable.Tests
             }));
 
             ShowDown showDown = new ShowDown();
-            var bestHands = showDown.GetWinners(allHands);
+            var bestHands = showDown.GetWinner(allHands);
 
             Assert.IsTrue(bestHands.Single().Contains
                 (
@@ -394,7 +366,7 @@ namespace Texas.Core.Portable.Tests
             }));
 
             ShowDown showDown = new ShowDown();
-            var bestHands = showDown.GetWinners(allHands);
+            var bestHands = showDown.GetWinner(allHands);
 
             Assert.IsTrue(bestHands.Single().Contains
                 (
@@ -439,7 +411,7 @@ namespace Texas.Core.Portable.Tests
             }));
 
             ShowDown showDown = new ShowDown();
-            var bestHands = showDown.GetWinners(allHands);
+            var bestHands = showDown.GetWinner(allHands);
 
             Assert.IsTrue(bestHands.Single().Contains
                 (
@@ -484,7 +456,7 @@ namespace Texas.Core.Portable.Tests
             }));
 
             ShowDown showDown = new ShowDown();
-            var bestHands = showDown.GetWinners(allHands);
+            var bestHands = showDown.GetWinner(allHands);
 
             Assert.IsTrue(bestHands.Single().Contains
                 (

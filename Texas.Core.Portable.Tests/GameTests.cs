@@ -53,7 +53,7 @@ namespace Texas.Core.Portable.Tests
             game.DealTurn();
             game.DealRiver();
 
-            var winners = game.GetWinner(players);
+            var winners = game.GetMatchResult(players);
 
             throw new NotImplementedException();
         }

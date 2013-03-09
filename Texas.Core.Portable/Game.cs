@@ -10,12 +10,12 @@ namespace Texas.Core.Portable
     {
         public bool Equals(Hand x, Hand y)
         {
-            return x.Sum(i => i.Point) == y.Sum(i => i.Point);
+            return x.ToString() == y.ToString();
         }
 
         public int GetHashCode(Hand obj)
         {
-            return obj.Sum(i => i.Point).GetHashCode();
+            return obj.ToString().GetHashCode();
         }
     }
 
@@ -78,24 +78,41 @@ namespace Texas.Core.Portable
             this.Board.Add(_deck.Pop());
         }
 
-        public IEnumerable<Player> GetWinner(IEnumerable<Player> players)
+        public MatchResult GetMatchResult(IEnumerable<Player> players)
         {
             Dictionary<Player, IEnumerable<Hand>> playerHandCombinations = new Dictionary<Player, IEnumerable<Hand>>();
 
             foreach (var player in players)
             {
-                IEnumerable<Hand> distinctHandCombination = player.StartingHand.Concat(this.Board).Combinations(5)
-                    .Select(cards => new Hand(cards)).Distinct(new HandComparer());
-                playerHandCombinations.Add(player, distinctHandCombination);
+                IEnumerable<Hand> handCombination = player.StartingHand.Concat(this.Board).Combinations(5)
+                    .Select(cards => new Hand(cards));
+                playerHandCombinations.Add(player, handCombination);
             }
 
-            IEnumerable<Hand> winningHands = new ShowDown().GetWinners(playerHandCombinations.SelectMany(i => i.Value));
+            Hand winningHand = new ShowDown().GetWinner(playerHandCombinations.SelectMany(i => i.Value)).Single();
 
             IEnumerable<Player> winningPlayers = playerHandCombinations
-                .Where(i => i.Value.Contains(winningHands.First(), new HandComparer()))
+                .Where(i => i.Value.Contains(winningHand, new HandComparer()))
                 .Select(i => i.Key).ToList();
 
-            return winningPlayers;
+            MatchResult matchResult = new MatchResult()
+            {
+                WinningHand = winningHand,
+                WinningPlayers = winningPlayers,
+                ParticipatedPlayers = players,
+                Board = this.Board
+            };
+
+            return matchResult;
+        }
+
+        public class MatchResult
+        {
+            public IEnumerable<Player> WinningPlayers { get; set; }
+            public Hand WinningHand { get; set; }
+            public IEnumerable<Player> ParticipatedPlayers { get; set; }
+            public HandCategory WinningHandCategory { get { return this.WinningHand.GetHandCategory(); } }
+            public IEnumerable<Card> Board { get; set; }
         }
     }
 
