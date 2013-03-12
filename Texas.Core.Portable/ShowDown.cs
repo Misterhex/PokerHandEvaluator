@@ -85,23 +85,35 @@ namespace Texas.Core.Portable
 
         class FullHouseShowDown : IShowDown
         {
-            class FullHouse
+            class FullHouse : Hand
             {
                 public Rank FullHouseRank { get; private set; }
                 public Rank OnePairRank { get; private set; }
+                private Hand _hand;
 
                 public FullHouse(Hand hand)
+                    : base(hand)
                 {
+                    _hand = hand;
                     this.FullHouseRank = hand.GroupBy(i => i.Rank).Where(i => i.Count() == 3).Select(i => i.Key).Single();
                     this.OnePairRank = hand.GroupBy(i => i.Rank).Where(i => i.Count() == 2).Select(i => i.Key).Single();
                 }
+
             }
 
             public IEnumerable<Hand> GetWinner(IEnumerable<Hand> hands)
             {
-                return hands.Select(i => new FullHouse(i))
+                FullHouse highestFullHouse = hands.Select(i => new FullHouse(i))
                     .OrderByDescending(i => i.FullHouseRank)
-                    .OrderByDescending(i => i.OnePairRank).ToList();
+                    .OrderByDescending(i => i.OnePairRank).First();
+
+                var highest = hands.Where(i =>
+                    {
+                        var fullhouse = new FullHouse(i);
+                        return (fullhouse.FullHouseRank == highestFullHouse.FullHouseRank
+                            && fullhouse.OnePairRank == highestFullHouse.OnePairRank);
+                    });
+                return highest;
             }
         }
 
