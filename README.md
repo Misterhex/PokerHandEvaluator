@@ -1,3 +1,1 @@
-PokerHandEvaluator
-
 Evaluate poker hand.
