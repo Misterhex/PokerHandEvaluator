@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Texas.Core.Portable
+namespace PokerHandEvaluator.Portable
 {
     /// <summary>
     /// The first 2 cards dealt to player.

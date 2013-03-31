@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Texas.Core.Portable.Tests
+namespace PokerHandEvaluator.Portable.Tests
 {
     [TestClass]
     public class HandTests
@@ -351,6 +351,26 @@ namespace Texas.Core.Portable.Tests
             })
            .GetKickers());
 
+        }
+
+        [TestMethod]
+        public void Should_be_able_to_instantiate_hand_using_string_representation()
+        {
+            Hand hand = new Hand("ac", "2d", "3h", "6d", "7s"); // ace club, deuce diamond, three heart, six diamond, seven spade
+            Assert.AreEqual(Rank.Ace, hand.First().Rank);
+            Assert.AreEqual(Suit.Club, hand.First().Suit);
+
+            Assert.AreEqual(Rank.Deuce, hand.Second().Rank);
+            Assert.AreEqual(Suit.Diamond, hand.Second().Suit);
+
+            Assert.AreEqual(Rank.Three, hand.Third().Rank);
+            Assert.AreEqual(Suit.Heart, hand.Third().Suit);
+
+            Assert.AreEqual(Rank.Six, hand.Fourth().Rank);
+            Assert.AreEqual(Suit.Diamond, hand.Fourth().Suit);
+
+            Assert.AreEqual(Rank.Seven, hand.Fifth().Rank);
+            Assert.AreEqual(Suit.Spade, hand.Fifth().Suit);
         }
 
     }

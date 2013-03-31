@@ -6,8 +6,8 @@
     <ProjectGuid>{91889DE8-50E7-4516-9E6F-884BED0E008B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Texas.Core.Portable.Tests</RootNamespace>
-    <AssemblyName>Texas.Core.Portable.Tests</AssemblyName>
+    <RootNamespace>PokerHandEvaluator.Portable.Tests</RootNamespace>
+    <AssemblyName>PokerHandEvaluator.Portable.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -55,16 +55,15 @@
   <ItemGroup>
     <Compile Include="CardTests.cs" />
     <Compile Include="DeckTests.cs" />
-    <Compile Include="GameTests.cs" />
-    <Compile Include="ShowDownTests.cs" />
+    <Compile Include="HandEvaluatorTests.cs" />
     <Compile Include="HandTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StartingHandTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Texas.Core.Portable\Texas.Core.Portable.csproj">
+    <ProjectReference Include="..\Texas.Core.Portable\PokerHandEvaluator.Portable.csproj">
       <Project>{7252f1d6-57d4-4b88-a8d0-fae882eee038}</Project>
-      <Name>Texas.Core.Portable</Name>
+      <Name>PokerHandEvaluator.Portable</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

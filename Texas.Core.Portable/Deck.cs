@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace Texas.Core.Portable
+namespace PokerHandEvaluator.Portable
 {
     public class Deck : Stack<Card>
     {
@@ -20,7 +20,7 @@ namespace Texas.Core.Portable
             return cards;
         }
 
-        private static List<Card> Shuffle(IEnumerable<Card> cards)
+        private static IEnumerable<Card> Shuffle(IEnumerable<Card> cards)
         {
             Random random = new Random();
             return cards.OrderBy(x => random.Next()).ToList();

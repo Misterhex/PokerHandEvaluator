@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Texas.Core.Portable
+namespace PokerHandEvaluator.Portable
 {
     public class Card : IEquatable<Card>, IComparable<Card>
     {
@@ -40,5 +40,6 @@ namespace Texas.Core.Portable
             return this.Point > other.Point ? 1 : -1;
         }
     }
+
 
 }

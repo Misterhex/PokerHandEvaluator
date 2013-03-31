@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace Texas.Core.Portable
+namespace PokerHandEvaluator.Portable
 {
     public static class FieldInfoExtensions
     {

@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Texas.Core.Portable.Tests", "Texas.Core.Portable.Tests\Texas.Core.Portable.Tests.csproj", "{91889DE8-50E7-4516-9E6F-884BED0E008B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokerHandEvaluator.Portable.Tests", "Texas.Core.Portable.Tests\PokerHandEvaluator.Portable.Tests.csproj", "{91889DE8-50E7-4516-9E6F-884BED0E008B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Texas.Core.Portable", "Texas.Core.Portable\Texas.Core.Portable.csproj", "{7252F1D6-57D4-4B88-A8D0-FAE882EEE038}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokerHandEvaluator.Portable", "Texas.Core.Portable\PokerHandEvaluator.Portable.csproj", "{7252F1D6-57D4-4B88-A8D0-FAE882EEE038}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

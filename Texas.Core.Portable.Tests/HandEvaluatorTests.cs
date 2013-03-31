@@ -6,10 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections;
 
-namespace Texas.Core.Portable.Tests
+namespace PokerHandEvaluator.Portable.Tests
 {
     [TestClass]
-    public class ShowDownTests
+    public class HandEvaluatorTests
     {
       
         [TestMethod]
@@ -57,7 +57,7 @@ namespace Texas.Core.Portable.Tests
                 new Card(Rank.Ten, Suit.Heart)
             }));
 
-            ShowDown showDown = new ShowDown();
+            HandEvaluator showDown = new HandEvaluator();
             var bestHands = showDown.GetWinner(allHands);
 
             Assert.IsTrue(bestHands.Single().Contains
@@ -134,7 +134,7 @@ namespace Texas.Core.Portable.Tests
                 new Card(Rank.Six, Suit.Spade),
             }));
 
-            ShowDown showDown = new ShowDown();
+            HandEvaluator showDown = new HandEvaluator();
             var bestHands = showDown.GetWinner(allHands);
 
             Assert.IsTrue(bestHands.Single().Contains
@@ -179,7 +179,7 @@ namespace Texas.Core.Portable.Tests
             }));
 
 
-            ShowDown showDown = new ShowDown();
+            HandEvaluator showDown = new HandEvaluator();
             var bestHands = showDown.GetWinner(allHands);
 
             Assert.IsTrue(bestHands.Single().Contains
@@ -223,7 +223,7 @@ namespace Texas.Core.Portable.Tests
             }));
 
 
-            ShowDown showDown = new ShowDown();
+            HandEvaluator showDown = new HandEvaluator();
             var bestHands = showDown.GetWinner(allHands);
 
             Assert.IsTrue(bestHands.Single().Contains
@@ -266,7 +266,7 @@ namespace Texas.Core.Portable.Tests
                 new Card(Rank.Ace, Suit.Heart)
             }));
 
-            ShowDown showDown = new ShowDown();
+            HandEvaluator showDown = new HandEvaluator();
             var bestHands = showDown.GetWinner(allHands);
 
             Assert.IsTrue(bestHands.Single().Contains
@@ -320,7 +320,7 @@ namespace Texas.Core.Portable.Tests
                 new Card(Rank.Ace, Suit.Heart)
             }));
 
-            ShowDown showDown = new ShowDown();
+            HandEvaluator showDown = new HandEvaluator();
             var bestHands = showDown.GetWinner(allHands);
 
             Assert.IsTrue(bestHands.Single().Contains
@@ -365,7 +365,7 @@ namespace Texas.Core.Portable.Tests
                 new Card(Rank.Ace, Suit.Heart)
             }));
 
-            ShowDown showDown = new ShowDown();
+            HandEvaluator showDown = new HandEvaluator();
             var bestHands = showDown.GetWinner(allHands);
 
             Assert.IsTrue(bestHands.Single().Contains
@@ -410,7 +410,7 @@ namespace Texas.Core.Portable.Tests
                 new Card(Rank.Ace, Suit.Heart)
             }));
 
-            ShowDown showDown = new ShowDown();
+            HandEvaluator showDown = new HandEvaluator();
             var bestHands = showDown.GetWinner(allHands);
 
             Assert.IsTrue(bestHands.Single().Contains
@@ -455,7 +455,7 @@ namespace Texas.Core.Portable.Tests
                 new Card(Rank.Ace, Suit.Heart)
             }));
 
-            ShowDown showDown = new ShowDown();
+            HandEvaluator showDown = new HandEvaluator();
             var bestHands = showDown.GetWinner(allHands);
 
             Assert.IsTrue(bestHands.Single().Contains

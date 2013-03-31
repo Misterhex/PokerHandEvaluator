@@ -5,9 +5,9 @@ using System.Text;
 using System.Collections;
 using System.Linq.Expressions;
 
-namespace Texas.Core.Portable
+namespace PokerHandEvaluator.Portable
 {
-    public interface IShowDown
+    public interface IHandEvaluator
     {
         IEnumerable<Hand> GetWinner(IEnumerable<Hand> hands);
     }
@@ -15,9 +15,9 @@ namespace Texas.Core.Portable
     /// <summary>
     /// ShowDown a texas holdem game.
     /// </summary>
-    public class ShowDown : IShowDown
+    public class HandEvaluator : IHandEvaluator
     {
-        class FlushAndStraightFlushShowDown : IShowDown
+        class FlushAndStraightFlushShowDown : IHandEvaluator
         {
             public IEnumerable<Hand> GetWinner(IEnumerable<Hand> hands)
             {
@@ -38,7 +38,7 @@ namespace Texas.Core.Portable
             }
         }
 
-        class StraightShowDown : IShowDown
+        class StraightShowDown : IHandEvaluator
         {
             public IEnumerable<Hand> GetWinner(IEnumerable<Hand> hands)
             {
@@ -53,7 +53,7 @@ namespace Texas.Core.Portable
             }
         }
 
-        class FourOfAKindShowDown : IShowDown
+        class FourOfAKindShowDown : IHandEvaluator
         {
             public IEnumerable<Hand> GetWinner(IEnumerable<Hand> hands)
             {
@@ -83,7 +83,7 @@ namespace Texas.Core.Portable
             }
         }
 
-        class FullHouseShowDown : IShowDown
+        class FullHouseShowDown : IHandEvaluator
         {
             class FullHouse : Hand
             {
@@ -118,7 +118,7 @@ namespace Texas.Core.Portable
         }
 
 
-        class ThreeOfAKindShowDown : IShowDown
+        class ThreeOfAKindShowDown : IHandEvaluator
         {
             public IEnumerable<Hand> GetWinner(IEnumerable<Hand> hands)
             {
@@ -146,7 +146,7 @@ namespace Texas.Core.Portable
             }
         }
 
-        class TwoPairShowDown : IShowDown
+        class TwoPairShowDown : IHandEvaluator
         {
             class TwoPair
             {
@@ -179,7 +179,7 @@ namespace Texas.Core.Portable
             }
         }
 
-        class OnePairShowDown : IShowDown
+        class OnePairShowDown : IHandEvaluator
         {
             class OnePair
             {
@@ -208,7 +208,7 @@ namespace Texas.Core.Portable
             }
         }
 
-        class HighCardShowDown : IShowDown
+        class HighCardShowDown : IHandEvaluator
         {
             public IEnumerable<Hand> GetWinner(IEnumerable<Hand> hands)
             {

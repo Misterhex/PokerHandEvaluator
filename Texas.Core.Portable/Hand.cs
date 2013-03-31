@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Texas.Core.Portable
+namespace PokerHandEvaluator.Portable
 {
     /// <summary>
     /// A hand always consists of five cards.
@@ -11,6 +11,20 @@ namespace Texas.Core.Portable
     public class Hand : IEnumerable<Card>
     {
         private IEnumerable<Card> _cards;
+
+        public Hand(string card1, string card2, string card3, string card4, string card5)
+        {
+            List<Card> cards = new List<Card>()
+            {
+                card1.AsCard(), card2.AsCard(), card3.AsCard(), card4.AsCard(), card5.AsCard()
+            };
+            if (cards.Where(i => i == null).Any())
+            {
+                throw new ArgumentException("invalid card string passed into constructor.");
+            }
+
+            _cards = cards;
+        }
 
         public Hand(IEnumerable<Card> cards)
         {
