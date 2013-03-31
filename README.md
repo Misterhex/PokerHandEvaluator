@@ -1,4 +1,3 @@
-TexasCSharp
-===========
+PokerHandEvaluator
 
-Simulate a real Texas game.
+Evaluate poker hand.
